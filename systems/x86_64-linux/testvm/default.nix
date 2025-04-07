@@ -1,10 +1,4 @@
-{
-  modulesPath,
-  lib,
-  pkgs,
-  ...
-}:
-{
+{ modulesPath, lib, pkgs, ... }: {
   # Installation:
   # nix run github:nix-community/nixos-anywhere name@ip -- --flake .#testvm --generate-hardware-config nixos-generate-config ./systems/x86_64-linux/testvm/hardware-configuration.nix
   # deploy updates:
@@ -37,15 +31,8 @@
 
     networking.hostName = "testvm";
 
-    environment.systemPackages = map lib.lowPrio (
-      with pkgs;
-      [
-        curl
-        gitMinimal
-        iputils
-        stable.zed-editor
-      ]
-    );
+    environment.systemPackages =
+      map lib.lowPrio (with pkgs; [ curl gitMinimal iputils ]);
 
     cli.programs.nh.enable = true;
     locale.enable = true;

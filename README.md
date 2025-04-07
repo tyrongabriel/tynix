@@ -57,5 +57,9 @@ Then execute the following commands:
   nix build .#topology.config.output
   ```
 
-## Appendix
+## Secrets (Sops-Nix)
+
+
+
+# Appendix
 Heavily inspired by [hmajid2301's Nixicle config](https://github.com/hmajid2301/nixicle)

@@ -1,13 +1,13 @@
 { config, ... }:
-let
-  # inherit (config.lib.topology)
-  #   mkInternet
-  #   mkDevice
-  #   mkSwitch
-  #   mkRouter
-  #   mkConnection
-  #   ;
-in
+# let
+#   inherit (config.lib.topology)
+#     mkInternet
+#     mkDevice
+#     mkSwitch
+#     mkRouter
+#     mkConnection
+#     ;
+# in
 {
   networks.home = {
     name = "Home";
