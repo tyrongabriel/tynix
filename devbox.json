@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
+  "packages": [
+    "deadnix@latest",
+    "statix@latest",
+    "nixfmt@latest",
+    "git@latest",
+    "sops@latest",
+    "ssh-to-age@latest",
+    "gnupg@latest",
+    "age@latest",
+    "deploy-rs@latest"
+  ],
+  "shell": {
+    "init_hook": ["echo 'Welcome to devbox!' "],
+    "scripts": {
+      "test": ["echo \"Error: no test specified\" && exit 1"]
+    }
+  }
+}
