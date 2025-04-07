@@ -14,9 +14,10 @@ Make sure you have passwordless sudo access via SSH on the target system before 
 git clone git@github.com:tyrongabriel/tynix.git ~/tynix/
 cd ~/tynix
 nix develop # Enters dev shell
+
 # Install NixOS and the flake on the target machine
 # User must have passwordless sudo access
-nixos-anywhere --flake '.#<system-name>' <user>@<host>
+nixos-anywhere --flake '.#<system-name>' <user>@<host> --generate-hardware-config nixos-generate-config ./systems/<architecture>/<system>/hardware-configuration.nix
 ```
 
 </details>
