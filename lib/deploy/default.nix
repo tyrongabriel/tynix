@@ -1,11 +1,6 @@
-{
-  lib,
-  inputs,
-}:
-let
-  inherit (inputs) deploy-rs;
-in
-{
+{ lib, inputs, }:
+let inherit (inputs) deploy-rs;
+in {
   ## Create deployment configuration for use with deploy-rs.
   ## CREDIT TO hmajid2301's nixicle flake
   ##
@@ -19,44 +14,36 @@ in
   ## ```
   ##
   #@ { self: Flake, overrides: Attrs ? {} } -> Attrs
-  mkDeploy =
-    {
-      self,
-      overrides ? { },
-    }:
+  mkDeploy = { self, overrides ? { }, }:
     let
       hosts = self.nixosConfigurations or { };
       names = builtins.attrNames hosts;
-      nodes = lib.foldl (
-        result: name:
+      nodes = lib.foldl (result: name:
         let
           host = hosts.${name};
-          user = host.config.user.name or null;
+          userName = host.config.user.name or null;
+          user = host.config.user or null;
           inherit (host.pkgs) system;
-        in
-        result
-        // {
+        in result // {
           ${name} = (overrides.${name} or { }) // {
             hostname = overrides.${name}.hostname or "${name}";
             profiles = (overrides.${name}.profiles or { }) // {
-              system =
-                (overrides.${name}.profiles.system or { })
-                // {
-                  path = deploy-rs.lib.${system}.activate.nixos host;
-                }
-                // lib.optionalAttrs (user != null) {
-                  user = "root";
-                  sshUser = user;
-                }
-                // lib.optionalAttrs (host.config.security.tynix.doas.enable or false) {
+              system = (overrides.${name}.profiles.system or { }) // {
+                path = deploy-rs.lib.${system}.activate.nixos host;
+              } // lib.optionalAttrs (userName != null) {
+                # If a user is given -> use it an do sudo
+                user =
+                  "root"; # Because it is different than sshUser, will use sudo
+                sshUser = userName;
+              } // lib.optionalAttrs
+                (host.config.security.tynix.doas.enable or false) {
                   sudo = "doas -u";
+                } // lib.optionalAttrs (!user.passwordlessSudo) {
+                  # If the user configured is not passwordless, ask for passwords
+                  interactiveSudo = true;
                 };
             };
           };
-        }
-      ) { } names;
-    in
-    {
-      inherit nodes;
-    };
+        }) { } names;
+    in { inherit nodes; };
 }

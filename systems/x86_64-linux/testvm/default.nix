@@ -22,6 +22,8 @@
       trustedUser = true;
     };
 
+    suites.homelab.enable = true;
+
     services.ssh = {
       authorizedKeys = [
         # change this to your ssh key
