@@ -30,8 +30,7 @@ in {
       };
     };
     users.users.${config.user.name} = {
-      openssh.authorizedKeys.keys =
-        if (cfg.authorizedKeys == [ ]) then [ ] else cfg.authorizedKeys;
+      openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
   };
 }

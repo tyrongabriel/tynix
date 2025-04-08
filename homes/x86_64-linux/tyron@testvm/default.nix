@@ -1,10 +1,5 @@
-{ pkgs, ... }:
-{
-  home.packages = with pkgs; [
-    btop
-    devbox
-    fzf
-  ];
+{ pkgs, ... }: {
+  home.packages = with pkgs; [ btop devbox fzf ];
 
   user = {
     enable = true;
