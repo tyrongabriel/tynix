@@ -18,7 +18,7 @@
       #   # change this to your ssh key
       #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
       # ];
-      passwordlessSudo = false;
+      passwordlessSudo = true;
       trustedUser = true;
     };
 

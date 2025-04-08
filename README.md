@@ -45,7 +45,7 @@ Then execute the following commands:
   nh home switch
   ```
 
-- To deploy to a remote server (e.g. Home Lab) via SSH (passwordless sudo recommended, not required):
+- To deploy to a remote server (e.g. Home Lab) via SSH (passwordless sudo required):
 
   ```bash
   deploy .#<system-name> --hostname <hostname> --ssh-user <user> --skip-checks
