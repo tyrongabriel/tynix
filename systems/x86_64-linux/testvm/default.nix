@@ -8,6 +8,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disks.nix
+    ./hardware-configuration.nix
   ];
 
   config = {

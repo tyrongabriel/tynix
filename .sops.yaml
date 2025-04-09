@@ -23,14 +23,17 @@ keys:
     - &tyron_yoga age1ejzmv648srczvsw42sv0wq9725ck6d4g3q28gskwgg5kfslqnywq92gm7f
   - &hosts
     - &testvm age16fgctth2kfq8esknuzfms46t4l0evx09lyc6u82qfdtyjekenggqj9k896
+    - &hp01 age1amspnyj2m4p2jhw6ktvc9ffw48kggtj38zge0mm0napgqe2xla3qadtlsm
 creation_rules:
   - path_regex: modules/nixos/secrets.yaml$
     key_groups:
       - age:
           - *tyron_yoga
           - *testvm
+          - *hp01
   - path_regex: modules/nixos/services/secrets.yaml$
     key_groups:
       - age:
           - *tyron_yoga
           - *testvm
+          - *hp01
