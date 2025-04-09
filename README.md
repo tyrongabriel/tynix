@@ -61,5 +61,24 @@ Then execute the following commands:
 
 
 
+## Adding a new Machine
+Get root or passwordless sudo access to the machine via ssh.
+
+Create a matching system configuration.
+
+Run the following command to install the configuration
+```bash
+just install-nixos <user> <host> <system-name> <port> <architecture>
+```
+After which, ssh into the machine and retreive the key for sops
+```bash
+nix run nixpkgs#ssh-to-age -- -i /etc/ssh/ssh_host_ed25519_key.pub
+```
+Add the key to the .sops.yaml file, and run
+```bash
+just sops-rekey
+```
+
+
 # Appendix
 Heavily inspired by [hmajid2301's Nixicle config](https://github.com/hmajid2301/nixicle)
