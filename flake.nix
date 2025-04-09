@@ -75,6 +75,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ## Nix-index (For comma) ##
+    nix-index-database.url = "github:nix-community/nix-index-database";
+
     ## Impermanence ##
     #impermanence.url = "github:nix-community/impermanence";
 

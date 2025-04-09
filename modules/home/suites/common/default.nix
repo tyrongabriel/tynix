@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 with lib.tynix;
 let cfg = config.suites.common;
@@ -8,5 +8,10 @@ in {
     # Add more options here
   };
 
-  config = lib.mkIf cfg.enable { security.sops.enable = true; };
+  config = lib.mkIf cfg.enable {
+    cli.shells.zsh.enable = true;
+    security.sops.enable = true;
+
+    home.packages = with pkgs; [ curl btop fzf ];
+  };
 }
