@@ -1,4 +1,5 @@
 { modulesPath, lib, pkgs, ... }: {
+  # VM: If using the alpine vm: update-extlinux (Script to update the extlinux bootloader), vi to /boot/extlinux.cfg and add kexec_load_disabled=0 to append
   # Installation:
   # nix run github:nix-community/nixos-anywhere name@ip -- --flake .#testvm --generate-hardware-config nixos-generate-config ./systems/x86_64-linux/testvm/hardware-configuration.nix
   # deploy updates:
