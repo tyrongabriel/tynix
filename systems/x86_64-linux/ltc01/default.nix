@@ -12,7 +12,7 @@ with lib.tynix; {
     ## WOL - Wake on Lan
     interfaces.enp0s31f6.wakeOnLan = {
       enable = true;
-      policy = "magic";
+      policy = [ "magic" ];
     };
   };
 

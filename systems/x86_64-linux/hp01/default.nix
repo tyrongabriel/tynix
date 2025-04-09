@@ -12,7 +12,7 @@ with lib.tynix; {
     ## WOL - Wake on Lan
     interfaces.eno1.wakeOnLan = {
       enable = true;
-      policy = "magic";
+      policy = [ "magic" ];
     };
   };
   ## Suites this machine is part of ##
