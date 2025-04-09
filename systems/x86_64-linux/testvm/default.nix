@@ -12,7 +12,7 @@
 
   config = {
     suites.server.enable = true;
-
+    services.tynix.adguardhome.enable = false;
     user = {
       name = "tyron";
       # authorizedKeys = [

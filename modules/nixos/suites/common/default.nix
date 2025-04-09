@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 with lib.tynix;
 let cfg = config.suites.common;
@@ -8,5 +8,8 @@ in {
     # Add more options here
   };
 
-  config = lib.mkIf cfg.enable { services.ssh.enable = true; };
+  config = lib.mkIf cfg.enable {
+    services.ssh.enable = true;
+    environment.systemPackages = with pkgs; [ comma ];
+  };
 }

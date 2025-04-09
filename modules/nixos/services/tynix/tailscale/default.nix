@@ -29,7 +29,7 @@ in {
     # For dns certs in the tailnet, run
     # sudo tailscale cert ${HOSTNAME}.${TAILNET_NAME}
     # Or like me make this service
-    systemd.services.update-tailscale-tls-cert = mkIf (cfg.useHttps) {
+    systemd.services.update-tailscale-tls-cert = mkIf cfg.useHttps {
       description = "Execute my tailscale cert to get new https cert";
       environment = {
         HOSTNAME = config.networking.hostName; # The hostname of the machine
@@ -43,7 +43,7 @@ in {
       };
     };
 
-    systemd.timers.update-tailscale-tls-cert-timer = mkIf (cfg.useHttps) {
+    systemd.timers.update-tailscale-tls-cert-timer = mkIf cfg.useHttps {
       description = "Run my tls update monthly";
       wantedBy = [ "timers.target" ];
       partOf = [ "update-tailscale-tls-cert.service" ];

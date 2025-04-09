@@ -1,4 +1,4 @@
-{ ... }:
+_:
 # let
 #   inherit (config.lib.topology)
 #     mkInternet

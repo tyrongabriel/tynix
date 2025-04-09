@@ -9,7 +9,8 @@
     "ssh-to-age@latest",
     "gnupg@latest",
     "age@latest",
-    "deploy-rs@latest"
+    "deploy-rs@latest",
+    "just@latest"
   ],
   "shell": {
     "init_hook": ["echo 'Welcome to devbox!' "],
