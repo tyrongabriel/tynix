@@ -11,6 +11,7 @@ in {
   config = mkIf cfg.enable {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+    programs.zsh.enable = true; # Enable zsh
     cli.programs = {
       nh.enable = true; # Enable a better nix command
       nix-ld.enable = true; # Enable nix-ld for unpatched binaries

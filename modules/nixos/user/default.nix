@@ -14,6 +14,8 @@ in {
       "Whether the user should be added to the trusted-users list of nix";
     authorizedKeys = mkOpt (listOf str) [ ]
       "SSH public keys to be added to the user's authorized_keys file.";
+    shell = mkOpt (nullOr package) null "The user's shell.";
+
   };
 
   config = {
@@ -34,6 +36,7 @@ in {
       inherit (cfg) name initialPassword;
       home = "/home/${cfg.name}";
       group = "users";
+      shell = cfg.shell;
       openssh.authorizedKeys.keys = cfg.authorizedKeys;
       # TODO: set in modules
       extraGroups = [

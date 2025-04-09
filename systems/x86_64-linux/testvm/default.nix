@@ -22,6 +22,7 @@
       ];
       passwordlessSudo = true;
       trustedUser = true;
+      shell = pkgs.zsh;
     };
 
     suites.homelab.enable = true;

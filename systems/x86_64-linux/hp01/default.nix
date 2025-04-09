@@ -45,6 +45,7 @@ with lib.tynix; {
     ];
     passwordlessSudo = true;
     trustedUser = true;
+    shell = pkgs.zsh;
   };
 
   ## Boot Config ##
