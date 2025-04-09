@@ -14,8 +14,14 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # Key for tailscale auth to automatically connect host
+    sops.secrets.tailscale-auth-key = { sopsFile = ../../secrets.yaml; };
+
     environment.variables = { TAILNET_NAME = cfg.tailnet; };
-    services.tailscale.enable = true;
+    services.tailscale = {
+      enable = true;
+      authKeyFile = config.sops.secrets.tailscale-auth-key.path;
+    };
     # If my tailnet uses routing features etc. need to configure
     #services.tailscale.useRoutingFeatures = "both" | "server" | "client"
 
