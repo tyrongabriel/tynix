@@ -10,7 +10,8 @@
     "gnupg@latest",
     "age@latest",
     "deploy-rs@latest",
-    "just@latest"
+    "just@latest",
+    "nixos-anywhere@latest"
   ],
   "shell": {
     "init_hook": ["echo 'Welcome to devbox!' "],

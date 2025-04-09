@@ -12,6 +12,8 @@ in {
       mkOpt bool false "Whether to allow passwordless sudo for the user.";
     trustedUser = mkOpt bool false
       "Whether the user should be added to the trusted-users list of nix";
+    authorizedKeys = mkOpt (listOf str) [ ]
+      "SSH public keys to be added to the user's authorized_keys file.";
   };
 
   config = {
@@ -27,13 +29,12 @@ in {
         options = [ "NOPASSWD" ];
       }];
     }];
-
     users.users.${cfg.name} = {
       isNormalUser = true;
       inherit (cfg) name initialPassword;
       home = "/home/${cfg.name}";
       group = "users";
-
+      openssh.authorizedKeys.keys = cfg.authorizedKeys;
       # TODO: set in modules
       extraGroups = [
         "wheel"

@@ -15,22 +15,15 @@
     services.tynix.adguardhome.enable = false;
     user = {
       name = "tyron";
-      # authorizedKeys = [
-      #   # change this to your ssh key
-      #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
-      # ];
+      authorizedKeys = [
+        # change this to your ssh key
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
+      ];
       passwordlessSudo = true;
       trustedUser = true;
     };
 
     suites.homelab.enable = true;
-
-    services.ssh = {
-      authorizedKeys = [
-        # change this to your ssh key
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
-      ];
-    };
 
     boot.loader.grub = {
       # no need to set devices, disko will add all devices that have a EF02 partition to the list already
@@ -46,10 +39,10 @@
 
     cli.programs.nh.enable = true;
     locale.enable = true;
-    users.users.root.openssh.authorizedKeys.keys = [
-      # change this to your ssh key
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
-    ];
+    # users.users.root.openssh.authorizedKeys.keys = [
+    #   # change this to your ssh key
+    #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqAq3GCuNXFc8mQL+H/czF0+pOlyQ4c4GILKUcrK0fZ 51530686+tyrongabriel@users.noreply.github.com"
+    # ];
 
     system.stateVersion = "24.11";
   };

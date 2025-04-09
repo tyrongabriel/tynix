@@ -75,6 +75,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ## Impermanence ##
+    #impermanence.url = "github:nix-community/impermanence";
+
     ## Pi-hole dns server ##
     #pihole = { url = "github:mindsbackyard/pihole-flake"; };
   };
@@ -116,6 +119,7 @@
         disko.nixosModules.disko
         sops-nix.nixosModules.sops
         nix-topology.nixosModules.default
+        #impermanence.nixosModules.impermanence
       ];
 
       ## Configure a specific host's modules ##
@@ -124,9 +128,8 @@
       # ];
 
       ## Add modules to all homes ##
-      # homes.modules = with inputs; [
-      #   impermanence.nixosModules.home-manager.impermanence
-      # ];
+      # homes.modules = with inputs;
+      #   [ impermanence.nixosModules.home-manager.impermanence ];
 
       ## Add overlays ##
       overlays = with inputs; [ nix-topology.overlays.default ];

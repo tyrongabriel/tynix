@@ -8,9 +8,13 @@ in {
     # Add more options here
   };
 
-  config = lib.mkIf cfg.enable {
-    services.ssh.enable = true;
+  config = mkIf cfg.enable {
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+    cli.programs.nh.enable = true; # Enable a better nix command
+    locale.enable = mkDefault true; # Enable default locale for Austrian stuff
+    services.ssh.enable = true; # Enable openssh server
     security.sops.enable = true;
-    environment.systemPackages = with pkgs; [ comma ];
+    environment.systemPackages = with pkgs; [ comma iputils git ];
   };
 }
