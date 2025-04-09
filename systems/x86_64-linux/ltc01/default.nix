@@ -4,8 +4,17 @@ with lib.tynix; {
   ## Disk Configuration ##
   imports = [ ./disks.nix ./hardware-configuration.nix ];
 
-  ## Network name (Should match flake!) ##
-  networking.hostName = "ltc01";
+  ## Networking ##
+  networking = {
+    ## Network name (Should match flake!) ##
+    hostName = "ltc01";
+
+    ## WOL - Wake on Lan
+    interfaces.enp0s31f6.wakeOnLan = {
+      enable = true;
+      policy = "magic";
+    };
+  };
 
   ## Suites this machine is part of ##
   suites = {

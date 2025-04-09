@@ -11,7 +11,10 @@ in {
   config = mkIf cfg.enable {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-    cli.programs.nh.enable = true; # Enable a better nix command
+    cli.programs = {
+      nh.enable = true; # Enable a better nix command
+      nix-ld.enable = true; # Enable nix-ld for unpatched binaries
+    };
     locale.enable = mkDefault true; # Enable default locale for Austrian stuff
     services.ssh.enable = true; # Enable openssh server
     security.sops.enable = true;
