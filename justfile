@@ -7,5 +7,5 @@ default:
 sops-rekey:
     sops updatekeys ./**/secrets.yaml
 
-install-nixos user host system port='22' architecture='x86_86-linux' :
+install-nixos user host system port='22' architecture='x86_64-linux' :
     nixos-anywhere --flake .#{{system}} {{user}}@{{host}} --ssh-port {{port}} --generate-hardware-config nixos-generate-config ./systems/{{architecture}}/{{system}}/hardware-configuration.nix
