@@ -55,9 +55,7 @@
     };
 
     ## Set of hardware configurations for NixOS ##
-    nixos-hardware = {
-      url = "github:nixos/nixos-hardware";
-    };
+    nixos-hardware = { url = "github:nixos/nixos-hardware"; };
 
     ## Secrets management with SOPS ##
     sops-nix = {
@@ -77,10 +75,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ## Pi-hole dns server ##
+    #pihole = { url = "github:mindsbackyard/pihole-flake"; };
   };
 
-  outputs =
-    inputs:
+  outputs = inputs:
     let
       lib = inputs.snowfall-lib.mkLib {
         inherit inputs;
@@ -95,8 +94,7 @@
           };
         };
       };
-    in
-    lib.mkFlake {
+    in lib.mkFlake {
       # Configure channel: https://snowfall.org/guides/lib/channels/
       channels-config = {
         allowUnfree = true;
@@ -131,28 +129,25 @@
       # ];
 
       ## Add overlays ##
-      overlays = with inputs; [
-        nix-topology.overlays.default
-      ];
+      overlays = with inputs; [ nix-topology.overlays.default ];
 
       ## Deployrs using lib by https://github.com/hmajid2301/nixicle ##
       deploy = lib.mkDeploy { inherit (inputs) self; };
 
       ## Run deployment checks ##
-      checks = builtins.mapAttrs (
-        system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy
-      ) inputs.deploy-rs.lib;
+      checks = builtins.mapAttrs
+        (system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy)
+        inputs.deploy-rs.lib;
 
       ## Nix topology ##
-      topology =
-        with inputs;
+      topology = with inputs;
         let
-          host = self.nixosConfigurations.${builtins.head (builtins.attrNames self.nixosConfigurations)};
-        in
-        import nix-topology {
+          host = self.nixosConfigurations.${
+              builtins.head (builtins.attrNames self.nixosConfigurations)
+            };
+        in import nix-topology {
           inherit (host)
-            pkgs
-            ; # Only this package set must include nix-topology.overlays.default
+            pkgs; # Only this package set must include nix-topology.overlays.default
           modules = [
             (import ./topology { inherit (host) config; })
             { inherit (self) nixosConfigurations; }
