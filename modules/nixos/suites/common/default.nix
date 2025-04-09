@@ -10,6 +10,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     services.ssh.enable = true;
+    security.sops.enable = true;
     environment.systemPackages = with pkgs; [ comma ];
   };
 }
