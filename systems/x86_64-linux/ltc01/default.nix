@@ -16,15 +16,16 @@ with lib.tynix; {
     };
   };
 
-  ## Cloudflare tunnel ##
-  sops.secrets.cloudflared_ltc01 = {
-    sopsFile = ../../../modules/nixos/services/secrets.yaml;
-    owner = "cloudflared";
-  };
   ## Need to run:
   # cloudflare login (Creates cert.pem to auth)
   # cloudflare tunnel create <name> (Creates credentials file we need to save with sops!)
+  # Copy the <uuid>.json file and enter (With '') into sops
   ##
+  ## Cloudflare tunnel ##
+  sops.secrets.cloudflared_ltc01 = {
+    sopsFile = ../../../modules/nixos/services/secrets.yaml;
+    #owner = "cloudflared";
+  };
   services = {
     cloudflared = {
       package = pkgs.stable.cloudflared;
@@ -33,6 +34,16 @@ with lib.tynix; {
         "da5011c5-e8b2-405d-8f5e-094adbb80c29" = {
           credentialsFile = config.sops.secrets.cloudflared_ltc01.path;
           default = "http_status:404";
+
+          ## Configure URL's ##
+          ingress = {
+            "homelab.tyrongabriel.com" = {
+              service = "https://localhost";
+              originRequest = {
+                originServerName = "homelab.tyrongabriel.com";
+              };
+            };
+          };
         };
       };
     };
