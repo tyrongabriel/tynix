@@ -37,12 +37,11 @@ with lib.tynix; {
 
           ## Configure URL's ##
           ingress = {
-            "homelab.tyrongabriel.com" = {
-              service = "https://localhost";
-              originRequest = {
-                originServerName = "homelab.tyrongabriel.com";
-              };
-            };
+            # "tyrongabriel.com" = {
+            #   service = "https://localhost:3000";
+            #   originRequest = { originServerName = "home.tyrongabriel.com"; };
+            # };
+            "*.tyrongabriel.com" = { service = "https://localhost"; };
           };
         };
       };
@@ -62,8 +61,10 @@ with lib.tynix; {
       enable = true;
       rootLogin = "no";
     };
+
     tynix = {
-      #adguardhome.enable = false;
+      traefik.enable = true;
+      adguardhome.enable = true;
     };
   };
 
