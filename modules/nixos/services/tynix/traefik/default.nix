@@ -24,7 +24,6 @@ in {
       };
     };
 
-    sops.secrets.cloudflare_api_key = { sopsFile = ../../secrets.yaml; };
     sops.secrets.cloudflare_api_email = { sopsFile = ../../secrets.yaml; };
     sops.secrets.cloudflare_dns_api_token = { sopsFile = ../../secrets.yaml; };
 
@@ -33,7 +32,6 @@ in {
 
       traefik = {
         enable = true;
-        # Make sure the user has the correct name
         group = "traefik";
 
         staticConfigOptions = {
@@ -124,7 +122,6 @@ in {
 
             };
           };
-
         };
 
         ## Define endpoint for traefik dashboard ##
@@ -168,9 +165,9 @@ in {
 
     # Create log files with correct permissions
     systemd.tmpfiles.rules = [
-      "f /var/log/traefik.log - traefik traefik 0640" # file, path, user, group, mode
-      "f /var/log/traefik-access.log - traefik traefik 0640"
-      "d /var/lib/traefik - traefik traefik 0750" # Ensure directory exists for cert.json
+      #"f /var/log/traefik.log - traefik traefik 0640" # file, path, user, group, mode
+      #"f /var/log/traefik-access.log - traefik traefik 0640"
+      #"d /var/lib/traefik - traefik traefik 0750" # Ensure directory exists for cert.json
     ];
 
     # (Optional) Log rotation

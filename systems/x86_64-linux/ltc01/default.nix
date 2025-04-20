@@ -63,8 +63,30 @@ with lib.tynix; {
     };
 
     tynix = {
+      enable = true;
       traefik.enable = true;
       adguardhome.enable = true;
+    };
+
+    ## Endpoint to access router config ##
+    traefik.dynamicConfigOptions.http = {
+      ## Configure traefik service ##
+      services = {
+        ## Enter all servers for load balancing ##
+        gli-router.loadBalancer.servers = [{ url = "http://192.168.8.1"; }];
+      };
+
+      ## Configure routing ##
+      routers = {
+        gli-router = {
+          entryPoints = [ "websecure" ]; # Configure entrypoints
+          rule =
+            "Host(`router.home.tyrongabriel.com`)"; # Rule for which domain to route to router
+          service = "gli-router"; # Service name
+          tls.certResolver = "letsencrypt";
+          #middlewares = [ "authentik" ]; # SSO with Authentik
+        };
+      };
     };
   };
 
