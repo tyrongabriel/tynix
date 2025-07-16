@@ -109,8 +109,8 @@ in {
                     sans = [ "*.home.tyrongabriel.com" ];
                   }
                   {
-                    main = "test.tyrongabriel.com";
-                    sans = [ "*.test.tyrongabriel.com" ];
+                    main = "tyrongabriel.com";
+                    sans = [ "*.tyrongabriel.com" ];
                   }
                   ## Mainly for testing -> Tailscale ##
                   # {
