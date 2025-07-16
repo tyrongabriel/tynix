@@ -42,6 +42,7 @@ with lib.tynix; {
             #   originRequest = { originServerName = "home.tyrongabriel.com"; };
             # };
             "*.tyrongabriel.com" = { service = "https://localhost"; };
+            "*.test.tyrongabriel.com" = { service = "https://localhost"; };
           };
         };
       };
