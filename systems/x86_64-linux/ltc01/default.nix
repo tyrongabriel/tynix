@@ -29,6 +29,7 @@ with lib.tynix; {
   services = {
     cloudflared = {
       package = pkgs.stable.cloudflared;
+
       enable = true;
       tunnels = {
         "da5011c5-e8b2-405d-8f5e-094adbb80c29" = {
@@ -42,7 +43,7 @@ with lib.tynix; {
             #   originRequest = { originServerName = "home.tyrongabriel.com"; };
             # };
             "*.tyrongabriel.com" = { service = "https://localhost"; };
-            "*.test.tyrongabriel.com" = { service = "https://localhost"; };
+            "test.tyrongabriel.com" = { service = "https://localhost"; };
           };
         };
       };
