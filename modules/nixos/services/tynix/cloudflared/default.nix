@@ -7,7 +7,7 @@ in {
     enable = mkEnableOption "Enable Cloudflared for tunnels and more";
     # Add more options here
     tunnelId = mkOption {
-      type = types.string;
+      type = types.str;
       default = "da5011c5-e8b2-405d-8f5e-094adbb80c29";
       description = "The ID of the tunnel to use";
     };
