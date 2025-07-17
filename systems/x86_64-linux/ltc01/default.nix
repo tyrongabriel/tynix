@@ -37,34 +37,25 @@ with lib.tynix; {
           default = "http_status:404";
 
           ## Configure URL's ##
-          ## Configure URL's ##
           ingress = {
-            # Existing specific rule for test.tyrongabriel.com (optional, can be covered by wildcard)
-            "test.tyrongabriel.com" = {
-              service =
-                "https://localhost"; # Assuming Traefik listens on localhost:443 for HTTPS
-              originRequest = {
-                originServerName =
-                  "test.tyrongabriel.com"; # Explicitly set for this specific host
-              };
-            };
-
             ## Wildcard rule for all other subdomains of tyrongabriel.com
             "*.tyrongabriel.com" = {
-              service =
-                "https://localhost"; # Cloudflare will pass the original Host header
+              service = "https://localhost";
               originRequest = {
-                # Cloudflare automatically preserves the Host header for wildcard origins.
-                # No need for explicit originServerName here if you want it to match the incoming hostname.
-                # If you *do* need a specific originServerName for *all* wildcards, you'd set it here,
-                # but that defeats the purpose of dynamically matching.
-                # For dynamic matching, simply omit or comment out originServerName,
-                # as the Host header is passed by default.
+                #originServerName =  "*.tyrongabriel.com"; # Does not work as in https://homelamb.github.io/posts/using-cloudflare-tunnel-with-traefik/
+                noTLSVerify =
+                  true; # Needed, otherwise Cloudflare will ask for a TLS cert for "localhost", which traefik will not provide!
               };
             };
 
-            # Catch-all for any other requests not matching the above
-            "*" = { service = "http_status:404"; };
+            # "test.tyrongabriel.com" = {
+            #   service =
+            #     "https://localhost";
+            #   originRequest = {
+            #     originServerName =
+            #       "test.tyrongabriel.com"; # Explicitly set for this specific host, lets cloudflare correctly fetch tls
+            #   };
+            # };
           };
         };
       };
@@ -89,28 +80,9 @@ with lib.tynix; {
       enable = true;
       traefik.enable = true;
       adguardhome.enable = true;
+      home-router.enable = true;
     };
 
-    ## Endpoint to access router config ##
-    traefik.dynamicConfigOptions.http = {
-      ## Configure traefik service ##
-      services = {
-        ## Enter all servers for load balancing ##
-        gli-router.loadBalancer.servers = [{ url = "http://192.168.8.1"; }];
-      };
-
-      ## Configure routing ##
-      routers = {
-        gli-router = {
-          entryPoints = [ "websecure" ]; # Configure entrypoints
-          rule =
-            "Host(`router.home.tyrongabriel.com`)"; # Rule for which domain to route to router
-          service = "gli-router"; # Service name
-          tls.certResolver = "letsencrypt";
-          #middlewares = [ "authentik" ]; # SSO with Authentik
-        };
-      };
-    };
   };
 
   ## User Config ##

@@ -67,7 +67,7 @@ in {
           ## TLS Certificates ##
           certificatesResolvers = {
             tailscale.tailscale = { };
-            letsencrypt = {
+            dns-cloudflare = {
               ## DNS Challenge with Cloudflare ##
               acme = {
                 email = "tyron.gabriel04@gmail.com";
@@ -102,7 +102,7 @@ in {
             websecure = {
               address = "0.0.0.0:443";
               http.tls = {
-                certResolver = "letsencrypt";
+                certResolver = "dns-cloudflare";
                 domains = [
                   {
                     main = "home.tyrongabriel.com";
@@ -154,7 +154,7 @@ in {
                 entryPoints = [ "websecure" ]; # Configure entrypoints
                 rule = "Host(`traefik.home.tyrongabriel.com`)";
                 service = "api@internal"; # Service name
-                tls.certResolver = "letsencrypt";
+                tls.certResolver = "dns-cloudflare";
                 middlewares = [ "redirect-to-dashboard" ]; # SSO with Authentik
               };
             };

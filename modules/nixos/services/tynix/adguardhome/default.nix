@@ -41,9 +41,9 @@ in {
               adguard = {
                 entryPoints = [ "websecure" ]; # Configure entrypoints
                 rule =
-                  "Host(`adguard.tyrongabriel.com`) || Host(`test.tyrongabriel.com`) || Host(`adguard.home.tyrongabriel.com`)"; # Rule for which domain to route to AdguardHome
+                  "Host(`adguard.tyrongabriel.com`) || Host(`adguard.home.tyrongabriel.com`)"; # Rule for which domain to route to AdguardHome
                 service = "adguard"; # Service name
-                tls.certResolver = "letsencrypt";
+                tls.certResolver = "dns-cloudflare";
                 #middlewares = [ "authentik" ]; # SSO with Authentik
               };
             };
