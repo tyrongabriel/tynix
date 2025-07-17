@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, ... }:
 with lib;
 with lib.tynix; {
   ## Disk Configuration ##
@@ -26,41 +26,6 @@ with lib.tynix; {
     sopsFile = ../../../modules/nixos/services/secrets.yaml;
     #owner = "cloudflared";
   };
-  services = {
-    cloudflared = {
-      package = pkgs.stable.cloudflared;
-
-      enable = true;
-      tunnels = {
-        "da5011c5-e8b2-405d-8f5e-094adbb80c29" = {
-          credentialsFile = config.sops.secrets.cloudflared_ltc01.path;
-          default = "http_status:404";
-
-          ## Configure URL's ##
-          ingress = {
-            ## Wildcard rule for all other subdomains of tyrongabriel.com
-            "*.tyrongabriel.com" = {
-              service = "https://localhost";
-              originRequest = {
-                #originServerName =  "*.tyrongabriel.com"; # Does not work as in https://homelamb.github.io/posts/using-cloudflare-tunnel-with-traefik/
-                noTLSVerify =
-                  true; # Needed, otherwise Cloudflare will ask for a TLS cert for "localhost", which traefik will not provide!
-              };
-            };
-
-            # "test.tyrongabriel.com" = {
-            #   service =
-            #     "https://localhost";
-            #   originRequest = {
-            #     originServerName =
-            #       "test.tyrongabriel.com"; # Explicitly set for this specific host, lets cloudflare correctly fetch tls
-            #   };
-            # };
-          };
-        };
-      };
-    };
-  };
 
   ## Suites this machine is part of ##
   suites = {
@@ -81,6 +46,10 @@ with lib.tynix; {
       traefik.enable = true;
       adguardhome.enable = true;
       home-router.enable = true;
+      cloudflared = {
+        enable = true;
+        tunnelId = "da5011c5-e8b2-405d-8f5e-094adbb80c29";
+      };
     };
 
   };
