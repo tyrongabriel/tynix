@@ -12,6 +12,6 @@ in {
     cli.shells.zsh.enable = true;
     security.sops.enable = true;
 
-    home.packages = with pkgs; [ curl btop fzf ];
+    home.packages = with pkgs; [ curl btop fzf jq ];
   };
 }
