@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 with lib;
 with lib.tynix;
-let cfg = config.services.tynix;
+let cfg = config.services.tynix.cloudflared;
 in {
-  options.services.tynix = with types; {
+  options.services.tynix.cloudflared = with types; {
     enable = mkEnableOption "Enable Cloudflared for tunnels and more";
     # Add more options here
     tunnelId = mkOption {
@@ -16,9 +16,9 @@ in {
   config = lib.mkIf cfg.enable {
     services = {
       cloudflared = {
-        package = pkgs.stable.cloudflared;
-
         enable = true;
+
+        package = pkgs.stable.cloudflared;
         tunnels = {
           "${cfg.tunnelId}" = {
             credentialsFile = config.sops.secrets.cloudflared_ltc01.path;
