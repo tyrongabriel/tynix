@@ -15,22 +15,24 @@ in {
 
   config = lib.mkIf cfg.enable {
     ## Endpoint to access router config ##
-    traefik.dynamicConfigOptions.http = {
-      ## Configure traefik service ##
-      services = {
-        ## Enter all servers for load balancing ##
-        gli-router.loadBalancer.servers = [{ url = cfg.url; }];
-      };
+    services = {
+      traefik.dynamicConfigOptions.http = {
+        ## Configure traefik service ##
+        services = {
+          ## Enter all servers for load balancing ##
+          gli-router.loadBalancer.servers = [{ url = cfg.url; }];
+        };
 
-      ## Configure routing ##
-      routers = {
-        gli-router = {
-          entryPoints = [ "websecure" ]; # Configure entrypoints
-          rule =
-            "Host(`router.home.tyrongabriel.com`)"; # Rule for which domain to route to router
-          service = "gli-router"; # Service name
-          tls.certResolver = "dns-cloudflare";
-          #middlewares = [ "authentik" ]; # SSO with Authentik
+        ## Configure routing ##
+        routers = {
+          gli-router = {
+            entryPoints = [ "websecure" ]; # Configure entrypoints
+            rule =
+              "Host(`router.home.tyrongabriel.com`)"; # Rule for which domain to route to router
+            service = "gli-router"; # Service name
+            tls.certResolver = "dns-cloudflare";
+            #middlewares = [ "authentik" ]; # SSO with Authentik
+          };
         };
       };
     };
