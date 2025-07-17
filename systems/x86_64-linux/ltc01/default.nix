@@ -37,22 +37,34 @@ with lib.tynix; {
           default = "http_status:404";
 
           ## Configure URL's ##
+          ## Configure URL's ##
           ingress = {
-            # "tyrongabriel.com" = {
-            #   service = "https://localhost:3000";
-            #   originRequest = { originServerName = "home.tyrongabriel.com"; };
-            # };
+            # Existing specific rule for test.tyrongabriel.com (optional, can be covered by wildcard)
             "test.tyrongabriel.com" = {
               service =
-                "http://localhost"; # NOT https, because I could not get cloudflare to work with traefik certs
+                "https://localhost"; # Assuming Traefik listens on localhost:443 for HTTPS
               originRequest = {
-                originServerName = "test.tyrongabriel.com";
-                httpHostHeader = "test.tyrongabriel.com";
-                #noTLSVerify = true;
+                originServerName =
+                  "test.tyrongabriel.com"; # Explicitly set for this specific host
               };
             };
-            #"*.tyrongabriel.com" = { service = "https://localhost"; };
 
+            ## Wildcard rule for all other subdomains of tyrongabriel.com
+            "*.tyrongabriel.com" = {
+              service =
+                "https://localhost"; # Cloudflare will pass the original Host header
+              originRequest = {
+                # Cloudflare automatically preserves the Host header for wildcard origins.
+                # No need for explicit originServerName here if you want it to match the incoming hostname.
+                # If you *do* need a specific originServerName for *all* wildcards, you'd set it here,
+                # but that defeats the purpose of dynamically matching.
+                # For dynamic matching, simply omit or comment out originServerName,
+                # as the Host header is passed by default.
+              };
+            };
+
+            # Catch-all for any other requests not matching the above
+            "*" = { service = "http_status:404"; };
           };
         };
       };
