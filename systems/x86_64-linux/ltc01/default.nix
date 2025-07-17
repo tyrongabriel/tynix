@@ -42,7 +42,6 @@ with lib.tynix; {
             #   service = "https://localhost:3000";
             #   originRequest = { originServerName = "home.tyrongabriel.com"; };
             # };
-            "*.tyrongabriel.com" = { service = "https://localhost"; };
             "test.tyrongabriel.com" = {
               service =
                 "http://localhost"; # NOT https, because I could not get cloudflare to work with traefik certs
@@ -52,6 +51,8 @@ with lib.tynix; {
                 #noTLSVerify = true;
               };
             };
+            #"*.tyrongabriel.com" = { service = "https://localhost"; };
+
           };
         };
       };
