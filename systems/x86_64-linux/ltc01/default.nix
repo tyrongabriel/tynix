@@ -44,10 +44,12 @@ with lib.tynix; {
             # };
             "*.tyrongabriel.com" = { service = "https://localhost"; };
             "test.tyrongabriel.com" = {
-              service = "https://localhost";
+              service =
+                "http://localhost"; # NOT https, because I could not get cloudflare to work with traefik certs
               originRequest = {
                 originServerName = "test.tyrongabriel.com";
-                noTLSVerify = true;
+                httpHostHeader = "test.tyrongabriel.com";
+                #noTLSVerify = true;
               };
             };
           };
