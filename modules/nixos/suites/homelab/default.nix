@@ -17,7 +17,7 @@ in {
       enable = true;
       useHttps = true;
       tailnet = "tail1c2108.ts.net";
-      auth = config.sops.secrets.homelab-tailscale-auth-key.path;
+      authKeyFile = config.sops.secrets.homelab-tailscale-auth-key.path;
     };
   };
 }

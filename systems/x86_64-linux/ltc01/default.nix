@@ -23,13 +23,13 @@ with lib.tynix; {
   ##
   ## Cloudflare tunnel ##
   sops.secrets.cloudflared_ltc01 = {
-    sopsFile = ../../../modules/nixos/services/secrets.yaml;
+    sopsFile = ./secrets.yaml;
     #owner = "cloudflared";
   };
 
   # Traefik secrets
-  sops.secrets.cloudflare_api_email = { sopsFile = ../../secrets.yaml; };
-  sops.secrets.cloudflare_dns_api_token = { sopsFile = ../../secrets.yaml; };
+  sops.secrets.cloudflare_api_email = { sopsFile = ./secrets.yaml; };
+  sops.secrets.cloudflare_dns_api_token = { sopsFile = ./secrets.yaml; };
 
   ## Suites this machine is part of ##
   suites = {
@@ -53,6 +53,23 @@ with lib.tynix; {
           enable = true;
           domain = "traefik.home.tyrongabriel.com";
         };
+        email = "tyron.gabriel04@gmail.com";
+        cloudflare = {
+          enable = true;
+          dnsApiTokenFile = config.sops.secrets.cloudflare_dns_api_token.path;
+          apiEmailFile = config.sops.secrets.cloudflare_api_email.path;
+        };
+        domains = [
+          {
+            main = "tyrongabriel.com";
+            sans = [ "*.tyrongabriel.com" ];
+          }
+          {
+            main = "home.tyrongabriel.com";
+            sans = [ "*.home.tyrongabriel.com" ];
+          }
+        ];
+
       };
       adguardhome.enable = true;
       home-router.enable = true;

@@ -27,7 +27,7 @@ in {
     domains = mkOpt (listOf (submodule {
       options = {
         main = mkOpt str null "Main domain name.";
-        sans = mkOpt (listOf str) [ ] "List of SANS domain names.";
+        sans = mkOpt (listOf str) [ ] "List of SANS domain names (Wildcards).";
       };
     })) [ ] "Domains to use for traefik.";
   };

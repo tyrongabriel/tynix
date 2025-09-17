@@ -43,3 +43,18 @@ creation_rules:
           - *hp01
           - *ltc01
           - *ncvps01
+  - path_regex: systems/x86_64-linux/ltc01/secrets.yaml$
+    key_groups:
+      - age:
+          - *tyron_yoga
+          - *ltc01
+  - path_regex: systems/x86_64-linux/hp01/secrets.yaml$
+    key_groups:
+      - age:
+          - *tyron_yoga
+          - *hp01
+  - path_regex: systems/x86_64-linux/ncvps01/secrets.yaml$
+    key_groups:
+      - age:
+          - *tyron_yoga
+          - *ncvps01
