@@ -16,7 +16,7 @@ in {
       autosuggestion.enable = mkDefault true;
 
       ## Shell Init ##
-      initExtra = ''
+      initContent = ''
         unalias gcd 2>/dev/null
       '';
 

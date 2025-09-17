@@ -25,6 +25,7 @@ keys:
     - &testvm age16fgctth2kfq8esknuzfms46t4l0evx09lyc6u82qfdtyjekenggqj9k896
     - &hp01 age1amspnyj2m4p2jhw6ktvc9ffw48kggtj38zge0mm0napgqe2xla3qadtlsm
     - &ltc01 age1rxfv9uygpp87s8552ak7mhyfta9hg8wqjkyqfs8cajk790v70ecqfj96cg
+    - &ncvps01 age1usmpn56pql0d4kpz379rjf9rgl3w6x7yk0x6qn088ve4uxwgzf0sw64kwq
 creation_rules:
   - path_regex: modules/nixos/secrets.yaml$
     key_groups:

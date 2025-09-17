@@ -19,7 +19,7 @@ in {
 
     programs.zsh = mkIf zshEnabled {
       # Add hook
-      initExtra = ''
+      initContent = ''
         eval "$(direnv hook zsh)"
       '';
       #oh-my-zsh.plugins = [ "direnv" ];

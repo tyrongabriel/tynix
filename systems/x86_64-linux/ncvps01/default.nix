@@ -8,7 +8,28 @@ with lib.tynix; {
   networking = {
     ## Network name (Should match flake!) ##
     hostName = "ncvps01";
+    useDHCP = false; # VPS requires manual conf
+    nameservers = [
+      "8.8.8.8" # Google's public DNS
+      "8.8.4.4" # Google's public DNS
+      "1.1.1.1" # Cloudflare's public DNS
+      "9.9.9.9" # Quad9 DNS
+    ];
   };
+
+  # Define the static network configuration for the 'ens3' interface
+  networking.interfaces.ens3 = {
+    # Set this to false to ensure no DHCP is used for this interface
+    useDHCP = false;
+    # Configure the IPv4 address and subnet mask
+    ipv4.addresses = [{
+      address = "152.53.149.109";
+      prefixLength = 22;
+    }];
+  };
+
+  # Set the default gateway
+  networking.defaultGateway = "152.53.148.1";
 
   ## Suites this machine is part of ##
   suites = { common.enable = true; };
@@ -62,7 +83,7 @@ with lib.tynix; {
   };
 
   ## Extra packages ##
-  #environment.systemPackages = with pkgs; [ stable.cloudflared ];
+  #environment.systemPackages = with pkgs; [  ];
 
   system.stateVersion = "25.05";
 }

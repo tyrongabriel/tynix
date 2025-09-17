@@ -9,7 +9,7 @@ in {
     enable = mkEnableOption "Enable nix-index (primarily for comma to work)";
     # Add more options here
   };
-  imports = with inputs; [ nix-index-database.hmModules.nix-index ];
+  imports = with inputs; [ nix-index-database.homeModules.nix-index ];
 
   config = mkIf cfg.enable {
     programs.nix-index = {
