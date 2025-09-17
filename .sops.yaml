@@ -35,6 +35,12 @@ creation_rules:
           - *hp01
           - *ltc01
           - *ncvps01
+  - path_regex: modules/nixos/suites/homelab/secrets.yaml$
+    key_groups:
+      - age:
+          - *tyron_yoga
+          - *hp01
+          - *ltc01
   - path_regex: modules/nixos/services/secrets.yaml$
     key_groups:
       - age:

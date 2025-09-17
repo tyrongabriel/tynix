@@ -30,8 +30,9 @@ in {
             profiles = (overrides.${name}.profiles or { }) // {
               system = (overrides.${name}.profiles.system or { }) // {
                 path = deploy-rs.lib.${system}.activate.nixos host;
-                remoteBuild =
-                  true; # Builds ALL systems on themselves! May need to parameterize that
+                remoteBuild = false;
+                #host.config.tynix.selfBuildDeployment;
+                #true; # Builds ALL systems on themselves! May need to parameterize that
               } // lib.optionalAttrs (userName != null) {
                 # If a user is given -> use it an do sudo
                 user =

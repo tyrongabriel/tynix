@@ -9,9 +9,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.headscale = {
-      enable = true;
-      package = pkgs.headscale;
-    };
+
   };
 }

@@ -1,29 +1,27 @@
 { config, lib, ... }:
 with lib;
+with lib.tynix;
 let cfg = config.services.tynix.traefik;
 in {
-  options.services.tynix.traefik = {
+  options.services.tynix.traefik = with types; {
     enable = mkEnableOption "Enable traefik";
     dashboard = mkOpt (submodule {
       options = {
         enable = mkEnableOption
           "Enable graphical dashboard. (Should be secured with middleware!)";
-        domain = mkOpt str null "Domain name for dashboard.";
+        domain = mkOpt (nullOr str) null "Domain name for dashboard.";
       };
-    }) {
-      enable = false;
-      domain = "";
-    } "Traefik dashboard config.";
-    email = mkOpt str null "Email for dns.";
-    cloudflare = mkOpt (nullOr (submodule {
+    }) { enable = false; } "Traefik dashboard config.";
+    email = mkOpt (nullOr str) null "Email for dns.";
+    cloudflare = mkOpt (submodule {
       options = {
         enable = mkEnableOption "Enable cloudflare dns challenge.";
-        dnsApiTokenFile = mkOpt path null
+        dnsApiTokenFile = mkOpt (nullOr path) null
           "API Key file for cloudflare. (Sops file with a line: CF_DNS_API_TOKEN=<token>)";
-        apiEmailFile = mkOpt path null
+        apiEmailFile = mkOpt (nullOr path) null
           "API Email for cloudflare api access. (Sops file with a line: CF_API_EMAIL=<email>)";
       };
-    })) null "Cloudflare configuration (DNS Challenge).";
+    }) { enable = false; } "Cloudflare configuration (DNS Challenge).";
     domains = mkOpt (listOf (submodule {
       options = {
         main = mkOpt str null "Main domain name.";
@@ -33,6 +31,24 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = ifThenElse cfg.cloudflare.enable
+          (cfg.cloudflare.dnsApiTokenFile != null && cfg.cloudflare.apiEmailFile
+            != null) true;
+        message =
+          "If cloudflare is enabled, both dnsApiTokenFile and apiEmailFile must be set.";
+      }
+      {
+        assertion =
+          ifThenElse cfg.dashboard.enable (cfg.dashboard.domain != null) true;
+        message = "If dashboard is enabled, domain must be set.";
+      }
+      {
+        assertion = cfg.email != null;
+        message = "Email must be set.";
+      }
+    ];
     ## Open Ports ##
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -42,10 +58,10 @@ in {
         # CF_API_KEY = config.sops.secrets.cloudflare_api_key.value;
       };
       serviceConfig = {
-        EnvironmentFile = lib.mkIf (cfg.cloudflare.enable) [
+        EnvironmentFile = ifThenElse cfg.cloudflare.enable [
           config.sops.secrets.cloudflare_api_email.path
           config.sops.secrets.cloudflare_dns_api_token.path
-        ];
+        ] [ ];
         User = "traefik";
       };
     };

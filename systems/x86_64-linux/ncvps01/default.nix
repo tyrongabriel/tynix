@@ -44,7 +44,7 @@ with lib.tynix; {
 
     tynix = {
       enable = true;
-      traefik.enable = true;
+      #traefik.enable = true;
     };
 
   };

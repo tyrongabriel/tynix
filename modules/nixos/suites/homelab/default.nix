@@ -10,9 +10,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Key for tailscale auth to automatically connect host for homelab
-    sops.secrets.homelab-tailscale-auth-key = {
-      sopsFile = ../../services/secrets.yaml;
-    };
+    sops.secrets.homelab-tailscale-auth-key = { sopsFile = ./secrets.yaml; };
     services.tynix.tailscale = {
       enable = true;
       useHttps = true;
