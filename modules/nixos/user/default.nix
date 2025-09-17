@@ -19,7 +19,7 @@ in {
   };
 
   config = {
-    users.mutableUsers = false;
+    users.mutableUsers = true; # To freely add users and store updated passwords
     nix.settings.trusted-users = mkIf cfg.trustedUser [ "${cfg.name}" ];
     ## For whell group (unused) ##
     # security.sudo.wheelNeedsPassword = false;
