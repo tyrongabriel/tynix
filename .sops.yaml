@@ -34,6 +34,7 @@ creation_rules:
           - *testvm
           - *hp01
           - *ltc01
+          - *ncvps01
   - path_regex: modules/nixos/services/secrets.yaml$
     key_groups:
       - age:
@@ -41,3 +42,4 @@ creation_rules:
           - *testvm
           - *hp01
           - *ltc01
+          - *ncvps01
