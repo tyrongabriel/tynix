@@ -4,6 +4,32 @@ let cfg = config.services.tynix.traefik;
 in {
   options.services.tynix.traefik = {
     enable = mkEnableOption "Enable traefik";
+    dashboard = mkOpt (submodule {
+      options = {
+        enable = mkEnableOption
+          "Enable graphical dashboard. (Should be secured with middleware!)";
+        domain = mkOpt str null "Domain name for dashboard.";
+      };
+    }) {
+      enable = false;
+      domain = "";
+    } "Traefik dashboard config.";
+    email = mkOpt str null "Email for dns.";
+    cloudflare = mkOpt (nullOr (submodule {
+      options = {
+        enable = mkEnableOption "Enable cloudflare dns challenge.";
+        dnsApiTokenFile = mkOpt path null
+          "API Key file for cloudflare. (Sops file with a line: CF_DNS_API_TOKEN=<token>)";
+        apiEmailFile = mkOpt path null
+          "API Email for cloudflare api access. (Sops file with a line: CF_API_EMAIL=<email>)";
+      };
+    })) null "Cloudflare configuration (DNS Challenge).";
+    domains = mkOpt (listOf (submodule {
+      options = {
+        main = mkOpt str null "Main domain name.";
+        sans = mkOpt (listOf str) [ ] "List of SANS domain names.";
+      };
+    })) [ ] "Domains to use for traefik.";
   };
 
   config = mkIf cfg.enable {
@@ -16,7 +42,7 @@ in {
         # CF_API_KEY = config.sops.secrets.cloudflare_api_key.value;
       };
       serviceConfig = {
-        EnvironmentFile = [
+        EnvironmentFile = lib.mkIf (cfg.cloudflare.enable) [
           config.sops.secrets.cloudflare_api_email.path
           config.sops.secrets.cloudflare_dns_api_token.path
         ];
@@ -24,8 +50,8 @@ in {
       };
     };
 
-    sops.secrets.cloudflare_api_email = { sopsFile = ../../secrets.yaml; };
-    sops.secrets.cloudflare_dns_api_token = { sopsFile = ../../secrets.yaml; };
+    #sops.secrets.cloudflare_api_email = { sopsFile = ../../secrets.yaml; };
+    #sops.secrets.cloudflare_dns_api_token = { sopsFile = ../../secrets.yaml; };
 
     services = {
       tailscale.permitCertUid = "traefik";
@@ -60,17 +86,17 @@ in {
           };
 
           ## Dashboard ##
-          api = { dashboard = true; };
+          api = { dashboard = cfg.dashboard.enable; };
           # Access the Traefik dashboard on <Traefik IP>:8080 of your server
           #api.insecure = true;
 
           ## TLS Certificates ##
           certificatesResolvers = {
             tailscale.tailscale = { };
-            dns-cloudflare = {
+            dns-cloudflare = lib.mkIf cfg.cloudflare.enable {
               ## DNS Challenge with Cloudflare ##
               acme = {
-                email = "tyron.gabriel04@gmail.com";
+                email = cfg.email;
                 storage = "${config.services.traefik.dataDir}/acme.json";
                 dnsChallenge = {
                   provider = "cloudflare";
@@ -80,6 +106,13 @@ in {
                   };
                   resolvers = [ "8.8.8.8:53" "1.1.1.1:53" ];
                 };
+              };
+            };
+            letsencrypt = {
+              acme = {
+                email = cfg.email;
+                storage = "${config.services.traefik.dataDir}/acme.json";
+                httpChallenge.entryPoint = "web";
               };
             };
           };
@@ -102,22 +135,24 @@ in {
             websecure = {
               address = "0.0.0.0:443";
               http.tls = {
-                certResolver = "dns-cloudflare";
-                domains = [
-                  {
-                    main = "home.tyrongabriel.com";
-                    sans = [ "*.home.tyrongabriel.com" ];
-                  }
-                  {
-                    main = "tyrongabriel.com";
-                    sans = [ "*.tyrongabriel.com" ];
-                  }
-                  ## Mainly for testing -> Tailscale ##
-                  # {
-                  #   main = "ltc01.tail1c2108.ts.net";
-                  #   sans = [ "*.ltc01.tail1c2108.ts.net" ];
-                  # }
-                ];
+                certResolver = ifThenElse cfg.cloudflare.enable "dns-cloudflare"
+                  "letsencrypt";
+                domains = cfg.domains;
+                #[
+                # {
+                #   main = "home.tyrongabriel.com";
+                #   sans = [ "*.home.tyrongabriel.com" ];
+                # }
+                # {
+                #   main = "tyrongabriel.com";
+                #   sans = [ "*.tyrongabriel.com" ];
+                # }
+                ## Mainly for testing -> Tailscale ##
+                # {
+                #   main = "ltc01.tail1c2108.ts.net";
+                #   sans = [ "*.ltc01.tail1c2108.ts.net" ];
+                # }
+                #];
               };
 
             };
@@ -134,7 +169,7 @@ in {
                   "test:$apr1$7QTyfrRD$Pk6ePBLx/YybzaoHvvdV90"
                 ];
               };
-              redirect-to-dashboard = {
+              redirect-to-dashboard = lib.mkIf cfg.dashboard.enable {
                 redirectRegex = {
                   # Regex matches only the exact root path "/"
                   regex = "^/$";
@@ -152,10 +187,13 @@ in {
             routers = {
               traefik-dashboard = {
                 entryPoints = [ "websecure" ]; # Configure entrypoints
-                rule = "Host(`traefik.home.tyrongabriel.com`)";
+                rule = "Host(`${cfg.dashboard.domain}`)";
                 service = "api@internal"; # Service name
-                tls.certResolver = "dns-cloudflare";
-                middlewares = [ "redirect-to-dashboard" ]; # SSO with Authentik
+                tls.certResolver =
+                  ifThenElse cfg.cloudflare.enable "dns-cloudflare"
+                  "letsencrypt";
+                middlewares =
+                  [ "redirect-to-dashboard" ]; # SSO with Authentik TODO
               };
             };
           };

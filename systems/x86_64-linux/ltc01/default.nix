@@ -27,6 +27,10 @@ with lib.tynix; {
     #owner = "cloudflared";
   };
 
+  # Traefik secrets
+  sops.secrets.cloudflare_api_email = { sopsFile = ../../secrets.yaml; };
+  sops.secrets.cloudflare_dns_api_token = { sopsFile = ../../secrets.yaml; };
+
   ## Suites this machine is part of ##
   suites = {
     server.enable = true;
@@ -43,7 +47,13 @@ with lib.tynix; {
 
     tynix = {
       enable = true;
-      traefik.enable = true;
+      traefik = {
+        enable = true;
+        dashboard = {
+          enable = true;
+          domain = "traefik.home.tyrongabriel.com";
+        };
+      };
       adguardhome.enable = true;
       home-router.enable = true;
       cloudflared = {

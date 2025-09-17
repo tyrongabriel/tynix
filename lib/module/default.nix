@@ -1,5 +1,6 @@
 { lib, ... }:
-with lib; rec {
+with lib;
+with lib.types; rec {
   ## Create a NixOS module option.
   ##
   ## ```nix

@@ -10,17 +10,20 @@ in {
     useHttps = mkBoolOpt false
       "Use Tailscale https certificates (Requires tailnet to be set)";
     tailnet = mkOpt str "" "The tailnet name to use.";
+    authKeyFile = mkOpt (nullOr path) null
+      "The path to the file storing the auth key for the specified tailnet.";
+    # To add the authkey, i reccomend using the sops module
+    # sops.secrets.tailscale-auth-key.path
+    # (Source Secrets file specified as: sops.secrets.tailscale-auth-key = { sopsFile = ./path/to/secrets.yaml; };)
+
     # Add more options here
   };
 
   config = lib.mkIf cfg.enable {
-    # Key for tailscale auth to automatically connect host
-    sops.secrets.tailscale-auth-key = { sopsFile = ../../secrets.yaml; };
-
     environment.variables = { TAILNET_NAME = cfg.tailnet; };
     services.tailscale = {
       enable = true;
-      authKeyFile = config.sops.secrets.tailscale-auth-key.path;
+      authKeyFile = cfg.authKeyFile;
     };
     # If my tailnet uses routing features etc. need to configure
     #services.tailscale.useRoutingFeatures = "both" | "server" | "client"
